@@ -18,64 +18,86 @@ public partial class _Default : Page
     protected void Button1_Click(object sender, EventArgs e)
     {
 
-
+        System.Diagnostics.Debug.WriteLine("poop"); //cant write to screen for some reason
         string str = TextBox1.Text;
+        
         char[] str1 = str.ToCharArray();
         byteObject input = new byteObject();
-        //str = input.altValue(str);
-        string str2 = input.toHex(str1);
+        str = input.altValue(str);
+        cell1.Text = str;
         
-        TextBox2.Text = str2;
-
 
         return;
     }
-    class memCell
+    class memClass
     {
-        int[,] cell = new int[67, 67]; //mem cell 2d array 64 by 64
-        for (int row = 0; row < 67; row++) //fill array by default with all 0
-        {
-            
-            for(int col = 0; col > 67; col++)
-            {
-                cell[row,col] = 
-            }
-        }
+        byteObject[] cell = new byteObject[64];
+ 
 
     }
 
     class byteObject 
     {
-        int dec;
-        char[] bin = { '0', '0', '0', '0', ' ', '0', '0', '0', '0' };
-        char[] hex = { '0', ' ', '0'};
-        string machineCode;
-        
-        
+
+        char[] intrBin = {'0','0','0','0','0','0','0','0'};
+      
         public string altValue(string assemble) //method assemble to bin with proper instrc bits
         {
-            string input = assemble;
-            switch(input)
+            
+            switch(assemble)
             {
                 case "ADD":
-                    bin[0] = '0';
-                    bin[1] = '0';
+                    intrBin[0] = '0';
+                    intrBin[1] = '0';
                     break;
                 case "AND":
-                    bin[0] = '0';
-                    bin[1] = '1';
+                    intrBin[0] = '0';
+                    intrBin[1] = '1';
                     break;
                 case "JMP":
-                    bin[0] = '1';
-                    bin[1] = '0';
+                    intrBin[0] = '1';
+                    intrBin[1] = '0';
                     break;
                 case "INC":
-                    bin[0] = '1';
-                    bin[1] = '1';
+                    intrBin[0] = '1';
+                    intrBin[1] = '1';
                     break;
             }
-            machineCode = new string(bin);
-            return machineCode;
+            //[0,1,2,3,4,5]
+            //[0-2 instr],[3 space],[4 hex1],[5 hex2]
+            //2 bits for instruc, 6 bits for address
+            //6 bits, 2 bits for first hex to bin, 4 bits for second hex to bin
+            //intruc is properly converted to bin when its by itself
+            
+            string str1 = assemble.Substring(4, 1); //take Hex string convert to bin string, THIS LINE BREAKS EVERTHING & IDK WHYYY
+            /*
+            long bit64 = Convert.ToInt64(str1, 16);
+            //Console.WriteLine("pop"); cant print to screen for some reason
+            string addr1 = Convert.ToString(bit64, 2);
+            char[] addrArr1 = addr1.ToCharArray(); //bin string to hex array
+            //Console.WriteLine(addr1); cant print to screen for some reason
+            
+            for (int i = 2; i <= 3; i++) //put data in master array
+            {
+                intrBin[i] = addrArr1[i];
+            }
+            string str2 = assemble.Substring(5); 
+            long bit64_2 = Convert.ToInt64(str1, 16);
+            //Console.WriteLine(str1);
+            //couldnt get it to work with strings, now im trying it with char array then i will convert to string for return
+            string addr2 = Convert.ToString(bit64_2, 2);
+            Console.WriteLine(addr2.Length);
+            char[] addrArr2 = addr2.ToCharArray();
+            //Console.WriteLine(addr2); 
+            
+            for (int i = 4; i <= 7; i++)
+            {
+                intrBin[i] = addrArr2[i];
+            }
+            */
+            string bitOutput = new string(intrBin);
+          
+            return bitOutput;
         }
         public string toHex(char[] bin) //method bin to hex
         {
@@ -135,14 +157,7 @@ public partial class _Default : Page
         }
         
         //try catches for wrong input data
-        /*public string toDec(char[] bin)    //method bin to dec
-        {
-            string input = new string(bin);
-            int decValue = Convert.ToInt32(input, 2);
-            string output = decValue.ToString();
-            return output;
-        }
-         */
+       
     }
 
     protected void TextBox1_TextChanged(object sender, EventArgs e)

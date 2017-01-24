@@ -18,7 +18,7 @@ public partial class _Default : Page
     protected void Button1_Click(object sender, EventArgs e)
     {
 
-        System.Diagnostics.Debug.WriteLine("poop"); //cant write to screen for some reason
+        //System.Diagnostics.Debug.WriteLine("poop"); 
         string str = TextBox1.Text;
         
         char[] str1 = str.ToCharArray();
@@ -39,12 +39,26 @@ public partial class _Default : Page
     class byteObject 
     {
 
-        char[] intrBin = {'0','0','0','0','0','0','0','0'};
+        char[] intrBin = {'0','0'};
       
         public string altValue(string assemble) //method assemble to bin with proper instrc bits
         {
+            string instruc1 = assemble.Substring(0, 3);
+            string hex1 = assemble.Substring(4,1);
+            //max for hex vales is 3F need to create if for that
+            int numVal1 = Int32.Parse(hex1);
+            if (numVal1 > 3)
+            {
+                string warn = "First hex value is too high enter a max hex value of 3F";
+                return warn;
+            }
+            else
+            {
+                
+            }
+            string hex2 = assemble.Substring(5);
             
-            switch(assemble)
+            switch(instruc1)
             {
                 case "ADD":
                     intrBin[0] = '0';
@@ -68,35 +82,23 @@ public partial class _Default : Page
             //2 bits for instruc, 6 bits for address
             //6 bits, 2 bits for first hex to bin, 4 bits for second hex to bin
             //intruc is properly converted to bin when its by itself
-            
-            string str1 = assemble.Substring(4, 1); //take Hex string convert to bin string, THIS LINE BREAKS EVERTHING & IDK WHYYY
-            /*
-            long bit64 = Convert.ToInt64(str1, 16);
-            //Console.WriteLine("pop"); cant print to screen for some reason
+            //take Hex string convert to bin string
+
+            //pad hex1 for 2 zeros
+            long bit64 = Convert.ToInt64(hex1, 16);
             string addr1 = Convert.ToString(bit64, 2);
-            char[] addrArr1 = addr1.ToCharArray(); //bin string to hex array
-            //Console.WriteLine(addr1); cant print to screen for some reason
+            int intVal1 = Int32.Parse(addr1);
+            string edit1 = intVal1.ToString("00");
             
-            for (int i = 2; i <= 3; i++) //put data in master array
-            {
-                intrBin[i] = addrArr1[i];
-            }
-            string str2 = assemble.Substring(5); 
-            long bit64_2 = Convert.ToInt64(str1, 16);
-            //Console.WriteLine(str1);
-            //couldnt get it to work with strings, now im trying it with char array then i will convert to string for return
+            //for hex2 value for 4 zeros
+            long bit64_2 = Convert.ToInt64(hex2, 16);
             string addr2 = Convert.ToString(bit64_2, 2);
-            Console.WriteLine(addr2.Length);
-            char[] addrArr2 = addr2.ToCharArray();
-            //Console.WriteLine(addr2); 
+            int intVal2 = Int32.Parse(addr2);
+            string edit2 = intVal2.ToString("0000");
             
-            for (int i = 4; i <= 7; i++)
-            {
-                intrBin[i] = addrArr2[i];
-            }
-            */
-            string bitOutput = new string(intrBin);
-          
+            //bring all componets together in display 
+            string assOut = new string(intrBin);
+            string bitOutput = assOut + edit1 + " " + edit2;            
             return bitOutput;
         }
         public string toHex(char[] bin) //method bin to hex
